@@ -1,0 +1,464 @@
+package com.zensar.afnls.services;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.stereotype.Service;
+
+import com.zensar.afnls.beans.AssetBean;
+import com.zensar.afnls.beans.EmployeeBean;
+import com.zensar.afnls.beans.ITOCCList;
+import com.zensar.afnls.beans.LaptopBean;
+import com.zensar.afnls.beans.Laptopsmail;
+import com.zensar.afnls.beans.ValidateEmployee;
+import com.zensar.afnls.daoservices.AssetForecastingDAOServicesImpl;
+import com.zensar.afnls.exception.AccountInactiveException;
+import com.zensar.afnls.exception.AssetTrackNotAddedException;
+import com.zensar.afnls.exception.AssetTrackNotDeletedException;
+import com.zensar.afnls.exception.AssetTrackNotFetchedException;
+import com.zensar.afnls.exception.AssetTrackNotUpdatedException;
+import com.zensar.afnls.exception.EmployeeNameNotFoundException;
+import com.zensar.afnls.exception.EmployeeNotActivatedException;
+import com.zensar.afnls.exception.EmployeeNotAddedException;
+import com.zensar.afnls.exception.EmployeeNotDeactivatedException;
+import com.zensar.afnls.exception.EmployeeNotFetchedException;
+import com.zensar.afnls.exception.EmployeeNotUpdatedException;
+import com.zensar.afnls.exception.FreezeDateAlreadyPresentException;
+import com.zensar.afnls.exception.IncorrectCredentialsException;
+import com.zensar.afnls.exception.LaptopNotAddedException;
+import com.zensar.afnls.exception.NoQuarterFoundException;
+import com.zensar.afnls.exception.OutdatedDatedException;
+import com.zensar.afnls.exception.QuarterNotFetchedException;
+import com.zensar.afnls.exception.QuartersAlreadySetException;
+import com.zensar.afnls.exception.ServicesNotAvailableException;
+import com.zensar.afnls.util.AFMSConstant;
+import com.zensar.afnls.util.LDAP;
+
+@Service
+public class AssetForecastingSystemServicesImpl {
+	@Autowired
+	private AssetForecastingDAOServicesImpl daoServicesImpl;
+
+	public EmployeeBean getEmployeeThroughLogin(EmployeeBean employeeBean) throws IncorrectCredentialsException,ServicesNotAvailableException, AccountInactiveException{
+		EmployeeBean bean;
+		try {
+			bean = daoServicesImpl.getEmployeeFromCredentials(employeeBean);
+			if(bean==null)	throw new IncorrectCredentialsException("Incorrect Credentials");
+			if(bean.getStatus().equalsIgnoreCase("D"))	throw new AccountInactiveException("Account Inactive,Contact PCO Team");
+			return bean;
+		}catch (DataAccessException e) {
+			throw new IncorrectCredentialsException("Incorrect Credentials");
+		}catch(SQLException e){
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+
+	}
+
+	public LaptopBean getLaptopsbylaptopid(int laptopid) throws SQLException,DataAccessException{
+		return daoServicesImpl.getLaptopsbylaptopid(laptopid);
+	}
+	public int getMaxbylaptopid() throws SQLException,DataAccessException{
+		return daoServicesImpl.maxLaptopId();
+	}
+	public List<LaptopBean> getLaptopsPerEmployee(String employeeId) throws SQLException,DataAccessException{
+		return daoServicesImpl.getLaptopsPerEmployee(employeeId);
+	}
+	public String getODCHeadUserId(){
+		try {
+			return daoServicesImpl.getODCUserId();
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
+	public EmployeeBean getUpdatedEmployeeBean(EmployeeBean employeeBean) throws ServicesNotAvailableException, EmployeeNotUpdatedException{
+		try{
+			if(!employeeBean.getDesignation().equalsIgnoreCase(AFMSConstant.designatioarray[5]))
+				return daoServicesImpl.getUpdatedEmployee(employeeBean);
+			return daoServicesImpl.getUpdatedPCOEmployee(employeeBean);
+		}catch (DataAccessException e) {
+			throw new EmployeeNotUpdatedException("Cannot Update Employee");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public boolean updateEmployeeDetails(EmployeeBean employeeBean) throws EmployeeNotUpdatedException, ServicesNotAvailableException{
+		try {
+			return daoServicesImpl.updateEmployee(employeeBean);
+		} catch (DataAccessException e) {
+			throw new EmployeeNotUpdatedException("Employee Details Not Updated");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public boolean deactivateEmoployee(int employeeId) throws EmployeeNotDeactivatedException, ServicesNotAvailableException{
+		try {
+			return daoServicesImpl.deactivateEmployee(employeeId);
+		} catch (DataAccessException e) {
+			throw new EmployeeNotDeactivatedException("Employee Details Not Deactivated");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public boolean addAssetTrack(AssetBean assetBean,String userId) throws ServicesNotAvailableException, AssetTrackNotAddedException{
+		try {
+			if(daoServicesImpl.addAssetForEmployee(assetBean,userId))
+				return true;
+			//else throw new AssetTrackNotAddedException("Asset Was Not Added");
+		}catch (DataAccessException e) {
+			
+			throw new AssetTrackNotAddedException("Asset Was Not Added");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+		return false;
+	}
+
+	public boolean updateAssetTrack(AssetBean assetBean) throws ServicesNotAvailableException, AssetTrackNotUpdatedException{
+		try {
+			if(daoServicesImpl.updateAssetForEmployee(assetBean))
+				return true;
+			else throw new AssetTrackNotUpdatedException("Asset Track Was Not Updated");
+		}catch (DataAccessException e) {
+			
+			throw new AssetTrackNotUpdatedException("Asset Track Was Not Updated");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+
+	public List<ITOCCList> getITOList() throws ServicesNotAvailableException, AssetTrackNotFetchedException{
+		try {
+			return daoServicesImpl.getITOList();
+		} catch (DataAccessException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+		return null;
+	}
+	public boolean updatelaptopstatus(LaptopBean laptopBean) throws ServicesNotAvailableException, AssetTrackNotUpdatedException{
+		try {
+			if(daoServicesImpl.updatelaptopstatus(laptopBean))
+				return true;
+			else throw new AssetTrackNotUpdatedException("Laptop status Not Updated");
+		}catch (DataAccessException e) {
+			throw new AssetTrackNotUpdatedException("Asset Track Was Not Updated");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	
+	public boolean updatelaptopstatus_MoreInfo(LaptopBean laptopBean) throws ServicesNotAvailableException, AssetTrackNotUpdatedException{
+		try {
+			if(daoServicesImpl.updatelaptopstatus_MoreInfo(laptopBean))
+				return true;
+			else throw new AssetTrackNotUpdatedException("Laptop status Not Updated");
+		}catch (DataAccessException e) {
+			throw new AssetTrackNotUpdatedException("Asset Track Was Not Updated");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	
+	public boolean Closelaptoprequest(LaptopBean laptopBean) throws ServicesNotAvailableException, AssetTrackNotUpdatedException{
+		try {
+			if(daoServicesImpl.Closelaptoprequest(laptopBean))
+				return true;
+			else throw new AssetTrackNotUpdatedException("Laptop status Not Updated");
+		}catch (DataAccessException e) {
+			throw new AssetTrackNotUpdatedException("Asset Track Was Not Updated");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	
+
+	public String getEmployeeId(String laptopid) throws SQLException,DataAccessException{
+		return daoServicesImpl.getEmployeeId(laptopid);
+	} 
+
+	public boolean deleteAssetTrack(int projectId) throws ServicesNotAvailableException, AssetTrackNotDeletedException{
+		try {
+			return daoServicesImpl.deleteAssetForEmployee(projectId);
+		}catch (DataAccessException e) {
+			throw new AssetTrackNotDeletedException("Asset Track Was Not Updated");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public List<AssetBean> getAllEmployeeSpecificAssets(String userId) throws ServicesNotAvailableException, AssetTrackNotFetchedException{
+		try {
+			return daoServicesImpl.getAssetsAsPerEmployee(userId);
+		} catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("Assets Were Not Fetched");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public List<EmployeeBean> getEmployeesForPCOTeam() throws ServicesNotAvailableException, EmployeeNotFetchedException{
+		try {
+			return daoServicesImpl.getAllEmployeesForPCO();
+		} catch (DataAccessException e) {
+			throw new EmployeeNotFetchedException("Employees Were Not Fetched");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public Laptopsmail getLaptopMails(Integer laptopid) throws DataAccessException, SQLException
+	{
+		return daoServicesImpl.getLaptopMails(laptopid);
+	}
+
+	public boolean addLaptopRequest(LaptopBean laptopBean,String employeeId,Laptopsmail ciscoManagerMail) throws ServicesNotAvailableException, LaptopNotAddedException{
+		try {
+			return daoServicesImpl.addLaptopRequestForEmployee(laptopBean, employeeId,ciscoManagerMail);
+		}catch (DataAccessException e) {
+			throw new LaptopNotAddedException("Early Refresh Laptop Request Was Not Added");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	public boolean addLaptopRequestNewHire(LaptopBean laptopBean,String userId) throws ServicesNotAvailableException, LaptopNotAddedException{
+		try {
+			return  daoServicesImpl.addLaptopRequestNewHireForEmployee(laptopBean, userId);
+		} catch (DataAccessException e) {
+			throw new LaptopNotAddedException("New Hire Laptop Request Was Not Added");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	public List<AssetBean> getAssetsAsPerEmployeeRequest(EmployeeBean employeeBean,int year,String quarter) throws ServicesNotAvailableException, AssetTrackNotFetchedException{
+		try {
+			return daoServicesImpl.getAssetsAsPerEmployeeRequest(employeeBean.getUserId(),year,quarter);
+		} catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("No Assets Found For Year "+year+ ((quarter.equalsIgnoreCase("ALL")) ?"":" Quarter "+quarter));
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	public List<AssetBean> getAssetsForProgramManager(EmployeeBean employeeBean,String projectManager, int year, String quarter) throws AssetTrackNotFetchedException, ServicesNotAvailableException {
+		try {
+			return daoServicesImpl.getAssetsForProgramManager(employeeBean.getUserId(),projectManager,year,quarter);
+		} catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("No Assets Found For Year "+year+ ((quarter.equalsIgnoreCase("ALL")) ?"":" Quarter "+quarter));
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+	public List<AssetBean> getAssetsForDeliveryHead(EmployeeBean employeeBean,String programManager, String projectManager, int year,String quarter) throws AssetTrackNotFetchedException, ServicesNotAvailableException {
+		try {
+			return daoServicesImpl.getAssetsForDeliveryHead(employeeBean.getUserId(),programManager,projectManager,year,quarter);
+		} catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("No Assets Found For Year "+year+ ((quarter.equalsIgnoreCase("ALL")) ?"":" Quarter "+quarter));
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public List<AssetBean> getAssetsForCiscoODCHead(EmployeeBean employeeBean,String deliveryHead, String programManager, String projectManager,int year, String quarter) throws AssetTrackNotFetchedException, ServicesNotAvailableException {
+		try {
+			return daoServicesImpl.getAssetsForCiscoODCHead(employeeBean.getUserId(),deliveryHead,programManager,projectManager,year,quarter);
+		} catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("No Assets Found For Year "+year+ ((quarter.equalsIgnoreCase("ALL")) ?"":" Quarter "+quarter));
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public List<LaptopBean> getlaptopfiltervalue(String filtervalue) throws ServicesNotAvailableException, AssetTrackNotFetchedException, DataAccessException, SQLException{
+		return daoServicesImpl.getLaptopsPerFilder(filtervalue);
+	}
+
+
+	public List<LaptopBean> getLaptopasPerDesg(String filtervalue,Integer designation) throws ServicesNotAvailableException, AssetTrackNotFetchedException, DataAccessException, SQLException{
+		return daoServicesImpl.getLaptopasPerDesg(filtervalue,designation);
+	}
+
+
+	public boolean addEmployee(EmployeeBean employeeBean) throws ServicesNotAvailableException, EmployeeNotAddedException{
+		try {
+			return daoServicesImpl.insertEmployee(employeeBean);
+		}catch (DataAccessException e) {
+			throw new EmployeeNotAddedException("Employee Not Added");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	/*	public boolean sendMailToCiscoODCHead(int year,String quarter,EmployeeBean employeeBean) throws ServicesNotAvailableException, AssetTrackNotFetchedException{
+		List<AssetBean> assetBeans=null;
+		assetBeans = getAssetsFromDaoAsPerEmployeeDesignation(employeeBean,year,quarter);
+		MailSender mailSender=new MailSender();
+		String subject="";
+		String body="";
+		if(quarter.equalsIgnoreCase("ALL")){
+			subject=year+" Yearly Asset Report From "+employeeBean.getEmployeeName();
+			body="<p style='color:blue;'><b>"+year+" Yearly Asset Report From "+employeeBean.getEmployeeName()+"</b><br/><br/> <table border='1'><tr><th>Project Name</th><th>Current Head Count</th><th>Growth Count</th><th>Growth Status</th>"+
+					"<th>Cisco Manager Id</th><th>Cisco Manager Name</th><th>Quarter</th><th>Project Location</th></tr>";
+		}
+		else{
+			subject="Asset Report From "+employeeBean.getEmployeeName()+"For "+year+" "+quarter;
+			body="<p style='color:blue;'><b>Asset Report From "+employeeBean.getEmployeeName()+"For "+year+" "+quarter+"</b><br/><br/> <table border='1'><tr><th>Project Name</th><th>Current Head Count</th><th>Growth/Decline Count</th><th>Growth/Decline Status</th>"+
+					"<th>Cisco Manager Id</th><th>Cisco Manager Name</th><th>Quarter</th><th>Project Location</th></tr>";
+		}
+		for(AssetBean assetBean:assetBeans){
+			body +="<tr><td>"+assetBean.getProjectName()+"</td>"+
+					"<td>"+assetBean.getCurrentHeadCount()+"</td>"+
+					"<td>"+assetBean.getGrowthCount()+"</td>"+
+					"<td>"+assetBean.getGrowthStatus()+"</td>"+
+					"<td>"+assetBean.getCiscoManagerId()+"</td>"+
+					"<td>"+assetBean.getCiscoManagerName()+"</td>"+
+					"<td>"+assetBean.getQuarter()+"</td>"+
+					"<td>"+assetBean.getProjectLocation()+"</td>"+
+					"</tr>";
+		}
+		boolean b1=mailSender.sendMailInTableFormat(subject,body, employeeBean.getUserId(),"vanaik","vanaik");
+		subject="Acknowledgement : "+subject;
+		body="Asset Report sent to avinash and cc "+employeeBean.getManagerId();
+		boolean b2=mailSender.sendAcknowledmentMail(subject,body,employeeBean.getUserId(), "vanaik", "vanaik");
+		if(b1 && b2)	return true;
+		return false;
+	}
+	 */
+	public AssetBean getAssetByAssetId(int assetId) throws ServicesNotAvailableException, AssetTrackNotFetchedException{
+		try {
+			return daoServicesImpl.getAssetBeanById(assetId);
+		}catch (DataAccessException e) {
+			throw new AssetTrackNotFetchedException("Asset Was Not Fetched");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public int getCurrentFiscalYear() throws  ServicesNotAvailableException, QuarterNotFetchedException{
+		try {
+			return daoServicesImpl.getCurrentfiscalYear();
+		} catch (DataAccessException | SQLException e) {
+			throw new QuarterNotFetchedException("Cannot Fetch Year");
+		}
+	}
+
+	public String getCurrentQuarter() throws ServicesNotAvailableException, QuarterNotFetchedException{
+		try {
+			switch(daoServicesImpl.getCurrentQuarter()){
+			case 1:
+				return "QTR1";
+			case 2: 
+				return "QTR2";
+			case 3:
+				return "QTR3";
+			case 4:
+				return "QTR4";
+			default:
+				return null;
+			}
+		}catch (DataAccessException e) {
+			throw new QuarterNotFetchedException("Cannot Fetch Quarter");
+		}catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+	}
+
+	public boolean setQuarterForYear(String year,String q1From,String q1To,String q2From,String q2To,String q3From,String q3To,String q4From,String q4To) throws QuartersAlreadySetException, ServicesNotAvailableException{
+		int check=0;
+		try {
+			check=daoServicesImpl.checkQuartersForYear(year);
+			if(check!=0)	throw new QuartersAlreadySetException("Quarters Already Set For Year "+year);
+			if(daoServicesImpl.setQuartersForYear(year,q1From,q1To,q2From,q2To,q3From,q3To,q4From,q4To))
+				return true;
+		} catch (DataAccessException e) {
+			
+			throw new QuartersAlreadySetException("Quarters Already Set For Year "+year);
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Services Not Available");
+		}
+		return false;		
+	}
+
+	/*LDAP Services*/
+	public List<String> getReportingStructure(EmployeeBean employeeBean){
+		LDAP ldap= new LDAP();
+		return ldap.getReporting(employeeBean.getUserId());
+	}
+	public String getCiscoManagerDetailsThroughLDAP(String ciscoManagerId) throws EmployeeNameNotFoundException{
+		LDAP ldap= new LDAP();
+		return ldap.getEmpNames(ciscoManagerId);
+	}
+
+	public boolean freezeSystem(String freezeTime) throws NoQuarterFoundException, ServicesNotAvailableException, FreezeDateAlreadyPresentException, OutdatedDatedException{
+		String str[] = freezeTime.split("/");
+		int year=Integer.parseInt(str[2]);
+		int quarter=0;
+		try {
+			quarter=daoServicesImpl.getQuarterForYear(year,freezeTime);
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Cannot Fetch Quarter");
+		}
+		if(quarter<1)	throw new NoQuarterFoundException("No Quarter Set For This Year");
+		try {
+			String freezeDate=daoServicesImpl.checkFreezeTimeForQuarter(year, quarter);
+			if(freezeDate!=null)	throw new FreezeDateAlreadyPresentException("Freeze Date Already Present For This Quarter");
+			daoServicesImpl.addFreezeTime(year, quarter, freezeTime);
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Cannot Add Freeze Time");
+		}
+		return true;
+	}
+	public boolean checkFreeze(){
+		return true;
+	}
+
+	public EmployeeBean getEmployeeById(String userId) throws ServicesNotAvailableException, EmployeeNotFetchedException{
+		try {
+			return daoServicesImpl.retrieveEmployeeById(userId);
+		} catch (DataAccessException e) {
+			throw new EmployeeNotFetchedException("Employee Not Found");
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Something went Wrong");
+		}
+	}
+
+	public boolean checkAssetPresent(String projectName){
+		return daoServicesImpl.checkAsset(projectName);
+	}
+
+	public String getFreezeDate(int year, String quarter) {
+		try {
+			return daoServicesImpl.getCurrentfreezeDate(year,quarter);
+		} catch (DataAccessException e) {
+			return null;
+		}
+	}
+
+	public String getUserIdOfProjectId(int projectId) {
+		try {
+			return daoServicesImpl.getUserIdOfProjectId(projectId);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
+	public boolean delegateProjectManager(String projectManagerId, String[] values) throws ServicesNotAvailableException {
+		try {
+			return daoServicesImpl.delegateProjectManager(projectManagerId,values);
+		} catch (SQLException e) {
+			throw new ServicesNotAvailableException("Something went Wrong");
+		}
+	}
+
+	public boolean delegateProgramManager(String programManagerId,String projectManagerId, String[] values) {
+		return true;
+	}
+
+
+
+
+}

@@ -1,0 +1,688 @@
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,
+body {
+  height: 100%;
+  /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+  min-height: 90%;
+  height: auto !important;
+  height: 100%;
+  /* Negative indent footer by its height */
+  margin: 0 auto -60px;
+  /* Pad bottom by footer height */
+  padding: 0 0 60px;
+}
+
+/* Set the fixed height of the footer here */
+#footer {
+  height: 60px;
+  background-color: #f5f5f5;
+}
+#header {
+  height: 80px;
+  background-color: #f5f5f5;
+}
+
+#header > .container {
+  padding-top: 20px;	
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.view-filter:after{
+	clear:both;
+}
+.view-filter{
+	margin-bottom: 2%;
+	text-align: right;
+	font-size: 1.1em;
+}
+/* Custom page CSS
+-------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+
+
+#footer > .container {
+  padding-top: 20px;	
+  padding-left: 390px;
+  padding-right: 15px;
+}
+.laptop-input-size input{
+	width:90%;
+}
+
+code {
+  font-size: 80%;
+}
+
+.panel-title span{
+	 float: right !important;
+	color: black;
+	font-family: araialblack;
+}
+
+
+
+/* input.form-control-half-id{ */
+/* 	margin-left: 2%; */
+/* 	border-radius :3% */
+	
+/* } */
+
+/* input.form-control-half-name{ */
+/* 	margin-left: 2%; */
+/* 	border-radius :3% */
+	
+	
+/* } */
+
+
+/* label.form-control-half-id{ */
+	
+/* 	margin-left: 5% */
+/* } */
+
+/* label.form-control-half-name{ */
+	
+/* 	margin-left: 7% */
+/* } */
+
+
+
+
+.clear{
+	clear:both;
+}
+
+
+
+
+
+
+/* header Fixed */
+/*
+.headertable thead, tbody, tr, td, th { display: block; }
+
+.headertable tr:after {
+    content: ' ';
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+
+.headertable thead th {
+    height: 70px;
+
+    text-align: left;
+}
+
+.headertable tbody {
+    height: 200px;
+    overflow-y: auto;
+}
+
+.headertable thead {
+    clear: both;
+}
+
+.headertable tbody td, thead th {
+    width: 10%;
+    float: left;
+}
+*//* header Fixed end */
+table-res {
+  min-height: .01%;
+  
+}
+@media screen and (max-width: 767px) {
+  .table-res {
+    width: 100%;
+    margin-bottom: 15px;
+    overflow-y: hidden;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
+    border: 1px solid #ddd;
+  }
+  .table-res > .table {
+    margin-bottom: 0;
+  }
+  .table-res > .table > thead > tr > th,
+  .table-res > .table > tbody > tr > th,
+  .table-res > .table > tfoot > tr > th,
+  .table-res > .table > thead > tr > td,
+  .table-res > .table > tbody > tr > td,
+  .table-res > .table > tfoot > tr > td {
+ 
+  }
+  .table-res > .table-bordered {
+    border: 0;
+  }
+  .table-res > .table-bordered > thead > tr > th:first-child,
+  .table-res > .table-bordered > tbody > tr > th:first-child,
+  .table-res > .table-bordered > tfoot > tr > th:first-child,
+  .table-res > .table-bordered > thead > tr > td:first-child,
+  .table-res > .table-bordered > tbody > tr > td:first-child,
+  .table-res > .table-bordered > tfoot > tr > td:first-child {
+    border-left: 0;
+  }
+  .table-res > .table-bordered > thead > tr > th:last-child,
+  .table-res > .table-bordered > tbody > tr > th:last-child,
+  .table-res > .table-bordered > tfoot > tr > th:last-child,
+  .table-res > .table-bordered > thead > tr > td:last-child,
+  .table-res > .table-bordered > tbody > tr > td:last-child,
+  .table-res > .table-bordered > tfoot > tr > td:last-child {
+    border-right: 0;
+  }
+  .table-res > .table-bordered > tbody > tr:last-child > th,
+  .table-res > .table-bordered > tfoot > tr:last-child > th,
+  .table-res > .table-bordered > tbody > tr:last-child > td,
+  .table-res > .table-bordered > tfoot > tr:last-child > td {
+    border-bottom: 0;
+  }
+}
+
+.alt {
+    background-color:#eee;
+}
+.boxed {
+  border: 0px solid green ;font-style: italic;border-bottom: medium;font-family: sans-serif;padding-left: 50%;
+}
+/* main menu styles */
+#nav {
+    display:inline-block;
+    width:100%;
+    margin:0px auto;
+    padding:0;
+    background:#072049 url(../images/bg.png) repeat-x 0 -110px;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .5);
+}
+#nav li {
+    margin:10px;
+    float:right;
+    position:relative;
+    list-style:none;
+}
+#nav a {
+    font-weight:bold;
+    color:#e7e5e5;
+    text-decoration:none;
+    display:block;
+    padding:8px 20px;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    text-shadow:0 2px 2px rgba(0,0,0, .7);
+}
+
+/* selected menu element */
+#nav .current a, #nav li:hover > a {
+    background:#7788aa  repeat-x 0 -20px;
+    color:#000;
+    border-top:1px solid #f8f8f8;
+
+    box-shadow:0 2px 2px rgba(0,0,0, .7); /*some css3*/
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .7);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .7);
+    text-shadow:0 2px 2px rgba(255,255,255, 0.7);
+}
+
+/* sublevels */
+#nav ul li:hover a, #nav li:hover li a {
+    background:none;
+    border:none;
+    color:#000;
+}
+#nav ul li a:hover {
+    background:#335599 url(../images/bg.png) repeat-x 0 -100px;
+    color:#fff;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    text-shadow:0 2px 2px rgba(0,0,0, 0.7);
+}
+
+#nav ul li:first-child > a {
+    -moz-border-radius-topleft:10px; /*some css3*/
+    -moz-border-radius-topright:10px;
+    -webkit-border-top-left-radius:10px;
+    -webkit-border-top-right-radius:10px;
+}
+#nav ul li:last-child > a {
+    -moz-border-radius-bottomleft:10px; /*some css3*/
+    -moz-border-radius-bottomright:10px;
+    -webkit-border-bottom-left-radius:10px;
+    -webkit-border-bottom-right-radius:10px;
+}
+
+/* drop down */
+#nav li:hover > ul {
+    opacity:1;
+    visibility:visible;
+}
+#nav ul {
+    opacity:0;
+    visibility:hidden;
+    padding:0;
+    width:175px;
+    position:absolute;
+    background:#aabbcc url(../images/bg.png) repeat-x 0 0;
+    border:1px solid #7788aa;
+
+    border-radius:10px; /*some css3*/
+    -moz-border-radius:10px;
+    -webkit-border-radius:10px;
+    box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -moz-box-shadow:0 2px 2px rgba(0,0,0, .5);
+    -webkit-box-shadow:0 2px 2px rgba(0,0,0, .5);
+
+    -moz-transition:opacity .25s linear, visibility .1s linear .1s;
+    -webkit-transition:opacity .25s linear, visibility .1s linear .1s;
+    -o-transition:opacity .25s linear, visibility .1s linear .1s;
+    transition:opacity .25s linear, visibility .1s linear .1s;
+}
+#nav ul li {
+    float:none;
+    margin:0;
+    
+}
+#nav ul a {
+    font-weight:normal;
+    text-shadow:0 2px 2px rgba(255,255,255, 0.7);
+}
+#nav ul ul {
+    left:160px;
+    top:0px;
+}
+   /* ----------->>> GridView <<<----------*/
+        .gridView
+        {
+            width: 100%;
+            clear: both;
+            margin: 1px 0;
+            border: medium none !important;
+            font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+                display: table;
+    border-spacing: 2px;
+    border-color: grey;    border-spacing: 0;
+    font-size: 20px;
+    /* color: #333; */
+    background-color: #fff
+        }
+        .gridView tr td
+        {
+             font-size: 16px;
+            vertical-align: top;
+            
+        }
+        .gridView thead tr, .footer
+        {
+            font-size: 16px;
+            font: bold 11px Arial;
+            vertical-align: middle;
+            text-decoration: none;
+            text-align: center;
+              font-size: 15px;
+        }
+        
+        /* --->>> HeaderStyle (cabeçalho) <<<---*/
+        .gridView thead tr
+        {
+            color: #333;
+            background: #fff url(../images/bg-header-grid.png) bottom repeat-x;
+            vertical-align: middle;
+            height: 25px;
+        }
+        .gridView thead tr th
+        {
+            border-top: 1px solid #E2E6E6;
+            border-bottom: 3px solid #E5E5E5;
+            vertical-align: middle;
+        }
+        .gridView thead tr a
+        {
+            font: bold 11px Arial, Verdana;
+            color: #333;
+            padding: 0 0 0 10px;
+            text-decoration: underline;
+            background: url(../images/Icones/ico-ordem.gif) left no-repeat;
+            vertical-align: middle;
+        }
+        .gridView thead tr a:hover
+        {
+            color: #06c;
+            background: url(../images/Icones/ico-ordem-hover.gif) left no-repeat;
+        }
+        
+        /* ---->>> FooterStyle (rodapé) <<<------*/
+        .footer
+        {
+            height: 20px;
+            width: auto;
+            margin: 0 auto;
+            text-align: center;
+            padding: 5px;
+        }
+        /*PagerStyle*/
+        .footer a, .footer span
+        {
+            color: #555;
+            padding: 2px 6px 2px 6px;
+            border: 1px solid #bcbcbc;
+            background: #F1F1F1 url(../images/bg-pg.png) bottom repeat-x;
+            text-decoration: none;
+        }
+        .footer a:hover
+        {
+            color: #C40B17;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #890812;
+        }
+        .footer span
+        {
+            color: #fff;
+            background: #D7403F url(../images/bg-pg-focus.png) bottom repeat-x;
+            border: 1px solid #890812;
+        }
+        
+        
+        /* ------------>>> Grid <<<--------------*/
+        .grid, .gridAlternada, .gridDestacada
+        {
+            font: 11px Arial,Verdana;
+            text-align: left;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .grid:hover, .gridAlternada:hover, .gridDestacada:hover
+        {
+            color: #000;
+            background: #D4E5F6 url(../images/bg-dia.png) 0 0 repeat-x;
+        }
+        
+        .grid
+        {
+            background-color: #fff;
+        }
+        /*RowStyle*/
+        .gridAlternada
+        {
+            background-color: #eee;
+        }
+        /*AlternatingRowStyle*/
+        .gridDestacada
+        {
+            background-color: #FFE082;
+            color: #333;
+        }
+        /*SelectedRowStyle / EditRowStyle*/
+        
+        
+        /* -------->>> Link Grid's <<<-----------*/
+        .grid a, .gridAlternada a, .gridDestacada a
+        {
+            color: #384249;
+            text-decoration: none;
+        }
+        .grid a:hover, .gridAlternada a:hover, .gridDestacada a:hover
+        {
+            color: #000;
+            text-decoration: underline;
+        }
+   
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    margin-bottom: 3rem;
+    width: 100%;
+    background: #fff;
+}
+td, th {
+    padding: 0.75rem 1.5rem;
+    text-align: left;
+    font-size: 15px;
+}
+th {
+    background-color: #556576;
+    background-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.25) 100%);
+    font-family: "Montserrat", Arial, sans-serif;
+    font-weight: bold;
+    color: #fff;
+    /* text-align: center; */
+    
+}
+thead a {
+	border: none;
+}
+tbody th {
+	background-color: #777;
+	background-image: none;
+}
+
+tbody tr:hover {
+    background-color: #ccc;
+}
+tbody img {
+	border-radius: 50%;
+	display: block;
+	width: 4rem;
+	height: 4rem;
+}
+.user-name,
+.user-firstName,
+.user-lastName,
+.user-location {
+	text-transform: capitalize;
+}
+
+/* Section toggle */
+.toggle {
+	background-color: transparent;
+	border: none;
+	color: #ddd;
+	font-size: 1rem;
+	font-weight: normal;
+	margin-left: 1rem;
+	padding: .25rem .5rem;
+	text-transform: none;
+}
+	.toggle:hover {
+		color: #fff;
+	}
+
+
+
+@import url(http://fonts.googleapis.com/css?family=Raleway);
+#cssmenu,
+#cssmenu ul,
+#cssmenu ul li,
+#cssmenu ul li a,
+#cssmenu #menu-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  list-style: none;
+  line-height: 1;
+  display: block;
+  position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#cssmenu:after,
+#cssmenu > ul:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+#cssmenu #menu-button {
+  display: none;
+}
+#cssmenu {
+  width: auto;
+  font-family: Raleway, sans-serif;
+  line-height: 1;
+}
+#cssmenu > ul {
+  background: #3db2e1;
+}
+#cssmenu > ul > li {
+  float: left;
+  -webkit-perspective: 1000px;
+  -moz-perspective: 1000px;
+  perspective: 1000px;
+}
+#cssmenu.align-center > ul {
+  font-size: 0;
+  text-align: center;
+}
+#cssmenu.align-center > ul > li {
+  display: inline-block;
+  float: none;
+}
+#cssmenu.align-right > ul > li {
+  float: right;
+}
+#cssmenu > ul > li > a {
+  padding: 16px 20px;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: #3db2e1;
+  -webkit-transition: all .3s;
+  -moz-transition: all .3s;
+  -o-transition: all .3s;
+  transition: all .3s;
+  -webkit-transform-origin: 50% 0;
+  -moz-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  -webkit-transform-style: preserve-3d;
+  -moz-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+#cssmenu > ul > li.active > a {
+  color: #dff2fa;
+}
+#cssmenu > ul > li:hover > a,
+#cssmenu > ul > li > a:hover {
+  color: #dff2fa;
+  -webkit-transform: rotateX(90deg) translateY(-23px);
+  -moz-transform: rotateX(90deg) translateY(-23px);
+  transform: rotateX(90deg) translateY(-23px);
+  -ms-transform: none;
+}
+#cssmenu > ul > li > a::before {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: -1;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 16px 20px;
+  color: #dff2fa;
+  background: #19799f;
+  content: attr(data-title);
+  -webkit-transition: background 0.3s;
+  -moz-transition: background 0.3s;
+  transition: background 0.3s;
+  -webkit-transform: rotateX(-90deg);
+  -moz-transform: rotateX(-90deg);
+  transform: rotateX(-90deg);
+  -webkit-transform-origin: 50% 0;
+  -moz-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  -ms-transform: translateY(- -18px);
+}
+#cssmenu > ul > li:hover > a::before,
+#cssmenu > ul > li > a:hover::before {
+  background: #3db2e1;
+}
+#cssmenu.small-screen {
+  width: 100%;
+}
+#cssmenu.small-screen > ul,
+#cssmenu.small-screen.align-center > ul {
+  width: 100%;
+  text-align: left;
+}
+#cssmenu.small-screen > ul > li,
+#cssmenu.small-screen.align-center {
+  float: none;
+  display: block;
+  border-top: 1px solid rgba(100, 100, 100, 0.1);
+}
+#cssmenu.small-screen > ul > li:hover > a,
+#cssmenu.small-screen > ul > li > a:hover {
+  color: #dff2fa;
+  -webkit-transform: none;
+  -moz-transform: none;
+  transform: none;
+  -ms-transform: none;
+}
+#cssmenu.small-screen > ul > li > a::before {
+  display: none;
+}
+#cssmenu.small-screen #menu-button {
+  display: block;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: #3db2e1;
+}
+#cssmenu.small-screen #menu-button:after {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 17px;
+  display: block;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  border-top: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  width: 22px;
+  height: 3px;
+}
+#cssmenu.small-screen #menu-button.menu-opened:after {
+  border-top: 2px solid #dff2fa;
+  border-bottom: 2px solid #dff2fa;
+}
+#cssmenu.small-screen #menu-button:before {
+  content: "";
+  position: absolute;
+  right: 20px;
+  top: 27px;
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #ffffff;
+}
+#cssmenu.small-screen #menu-button.menu-opened:before {
+  background: #dff2fa;
+}
+
